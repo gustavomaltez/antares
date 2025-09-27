@@ -23,55 +23,43 @@ With Antares, your CV becomes just that — a standout, impossible to miss.
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React SPA with TypeScript
+- **Desktop App**: Tauri v2 + Rust
+- **Frontend**: React + TypeScript
 - **Styling**: TailwindCSS
-- **Build Tool**: esbuild
-- **AI Engine**: Docker + Ollama (local LLM processing)
-- **Extensibility**: `@antares/plugin` package (coming soon)
+- **Build**: Vite + Yarn
+- **AI**: Docker + Ollama (local LLM)
 
-## 🏗️ Architecture
+## 🚀 How to Run
 
-### Core Application
-- Modern React single-page application built with TypeScript
-- Lightning-fast builds powered by esbuild
-- Beautiful, responsive UI with TailwindCSS
-- Complete privacy - everything runs locally
+**Prerequisites:**
+- Node.js 18+ + Yarn
+- Rust + Cargo
+- Docker (optional, for AI features)
 
-### AI Processing
-- Docker containers running Ollama for local LLM inference
-- No data leaves your machine
-- Support for various open-source models
-- Future plugin system for API integrations (OpenAI, etc.)
+**Linux dependencies:**
+```bash
+sudo apt install libwebkit2gtk-4.1-dev build-essential libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
+```
 
-### Plugin System (Roadmap)
-The upcoming `@antares/plugin` package will enable:
-- Custom API integrations
-- Third-party AI service connections
-- Extensible processing pipelines
-- Community-driven enhancements
+**Quick Start:**
+```bash
+git clone https://github.com/gustavomaltez/antares.git
+cd antares
+yarn install
+yarn tauri dev
+```
 
-## 🚧 Development Status
+## 📄 License
 
-This project is currently in development. Stay tuned for:
-- [ ] Initial React application setup
-- [ ] Docker + Ollama integration
-- [ ] CV parsing and analysis
-- [ ] ATS compatibility checking
-- [ ] Plugin architecture
-- [ ] Export functionality
+This project is licensed under the [MIT License](LICENSE).
 
-## 🌟 Features (Coming Soon)
+## 🤝 Contributing
 
-- **Smart CV Analysis**: AI-powered resume parsing and optimization
-- **Job Matching**: Tailored recommendations based on job descriptions  
-- **ATS Optimization**: Ensure your CV passes applicant tracking systems
-- **Skill Gap Analysis**: Identify areas for professional growth
-- **Multiple Export Formats**: PDF, Word, and more
-- **Plugin Ecosystem**: Extend functionality with custom integrations
-
-## 💫 Getting Started
-
-*Instructions will be available once the initial setup is complete.*
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
 
 ---
 
