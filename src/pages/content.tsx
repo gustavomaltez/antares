@@ -1,22 +1,22 @@
 import { useRoute } from "@antares/infra/routing";
 import { Home } from "./home";
-import { BaseResumeContent } from "./base-resume";
-import { ExperienceContent } from "./experience";
-import { WritingStyleContent } from "./writing-style";
-import { TailorContent } from "./tailor";
+import { Resume } from "./resume";
+import { Experience } from "./experience";
+import { WritingStyle } from "./writing-style";
+import { Tailor } from "./tailor";
 
 export function Content() {
   const { route } = useRoute();
 
   switch (route) {
     case "/base-resume":
-      return <BaseResumeContent />;
+      return <Resume />;
     case "/experience":
-      return <ExperienceContent />;
+      return <Experience />;
     case "/writing-style":
-      return <WritingStyleContent />;
+      return <WritingStyle />;
     case "/tailor":
-      return <TailorContent />;
+      return <Tailor />;
     default:
       return <Home />;
   }
