@@ -7,9 +7,9 @@ export default function App() {
     <div className="flex min-h-screen w-full bg-background text-foreground">
       <SideBar />
       <main className="bg-background relative flex w-full flex-1 flex-col">
-        <header className="flex items-center justify-end p-4 sticky top-0 z-10">
+        <div className="absolute top-4 right-4">
           <ThemeToggle />
-        </header>
+        </div>
         <div className="flex-1 p-6 bg-background">
           <Content />
         </div>
