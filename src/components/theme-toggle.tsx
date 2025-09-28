@@ -1,20 +1,17 @@
 import { Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useTheme } from "@/components/theme-provider";
+import { useTheme } from "@antares/infra/theme";
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-
-  function toggle() {
-    if (theme === "light") return setTheme("dark");
-    if (theme === "dark") return setTheme("light");
-  }
+  const { toggleTheme } = useTheme();
 
   return (
-    <Button variant="outline" size="icon" onClick={toggle}>
+    <button
+      onClick={toggleTheme}
+      className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 border bg-background shadow-sm hover:bg-accent hover:text-accent-foreground size-9 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+    >
       <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
       <span className="sr-only">Toggle theme</span>
-    </Button>
+    </button>
   );
 }

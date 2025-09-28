@@ -9,7 +9,7 @@ export default defineConfig(async () => ({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@antares": path.resolve(__dirname, "./src"),
     },
   },
   clearScreen: false,
