@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { RouteManager } from "./manager";
 
 export function useRoute() {
-  const [route, setRoute] = useState(RouteManager.currentRoute);
+  const [route, setRoute] = useState(RouteManager.route);
 
   useEffect(() => {
     return RouteManager.on("route-updated", () => {
-      setRoute(RouteManager.currentRoute);
+      setRoute(RouteManager.route);
     });
   }, []);
 

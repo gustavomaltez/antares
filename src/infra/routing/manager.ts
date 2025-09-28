@@ -14,7 +14,9 @@ class RouteManagerSingleton {
     this.emit = this.emit.bind(this);
     this.on = this.on.bind(this);
     this.navigate = this.navigate.bind(this);
-    this.sync();
+    window.addEventListener("popstate", () => {
+      this.emit("route-updated");
+    });
   }
 
   private events: Record<RouteEvent, RouteEventCallback[]> = {
@@ -34,13 +36,7 @@ class RouteManagerSingleton {
     }
   }
 
-  private sync() {
-    window.addEventListener("popstate", () => {
-      this.emit("route-updated");
-    });
-  }
-
-  public get currentRoute(): Route {
+  public get route(): Route {
     return window.location.pathname;
   }
 
