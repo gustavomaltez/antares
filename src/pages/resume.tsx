@@ -1,14 +1,6 @@
-import { useState } from "react";
-import { invoke } from '@tauri-apps/api/core';
-import { Upload, FileText, Download, Eye, Calendar, User, Lightbulb } from "lucide-react";
-
-// TODO: Replace with actual resume data
-const CURRENT_RESUME = {
-  name: "John_Doe_Resume_2024.docx",
-  uploadDate: "2024-09-15",
-  size: "245 KB",
-  pages: 2
-};
+import { useEffect, useState } from "react";
+import { Upload, FileText, Download, Calendar, User, Lightbulb, Trash } from "lucide-react";
+import { DocumentManager, ResumeFile } from "@antares/infra/documents";
 
 export function Resume() {
   return (
@@ -69,13 +61,11 @@ function UploadSection() {
     setUploadProgress(0);
 
     try {
-      const bytes = new Uint8Array(await file.arrayBuffer());
-
       const progressInterval = setInterval(function () {
         setUploadProgress(prev => Math.min(prev + 20, 90));
       }, 200);
 
-      await invoke("save_base_resume", { data: bytes, name: file.name });
+      await DocumentManager.saveBaseResume(file);
 
       clearInterval(progressInterval);
       setUploadProgress(100);
@@ -100,7 +90,7 @@ function UploadSection() {
           ${isDragging ? "border-primary bg-primary/5 scale-[1.02]" : ""}
           ${!isDragging && isUploading ? "border-primary bg-primary/5" : ""}
           ${!isDragging && !isUploading ? "border-border hover:border-primary/50 hover:bg-accent/5" : ""}
-          `}
+        `}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -135,13 +125,12 @@ function UploadProgress({ uploadProgress }: { uploadProgress: number; }) {
   );
 }
 
-function UploadUI({
-  isDragging,
-  onFileSelect
-}: {
-  isDragging: boolean;
-  onFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) {
+function UploadUI(
+  { isDragging, onFileSelect }: {
+    isDragging: boolean;
+    onFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  }
+) {
   return (
     <div className="space-y-4">
       <div className="flex justify-center">
@@ -184,6 +173,19 @@ function CurrentResumeSection() {
 }
 
 function ResumeCard() {
+  const [data, setData] = useState<ResumeFile | null>(null);
+
+  useEffect(() => {
+    async function fetchResume() {
+      if (data) return;
+      const content = await DocumentManager.getResumeFile();
+      if (content) setData(content);
+    }
+    fetchResume();
+  }, []);
+
+  if (!data) return;
+
   return (
     <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-all duration-200">
       <div className="flex items-start justify-between">
@@ -191,44 +193,43 @@ function ResumeCard() {
           <div className="p-3 bg-primary/10 rounded-lg">
             <FileText className="h-6 w-6 text-primary" />
           </div>
-          <ResumeInfo />
-        </div>
-        <ResumeActions />
-      </div>
-    </div>
-  );
-}
 
-function ResumeInfo() {
-  return (
-    <div className="space-y-2">
-      <h3 className="font-medium text-card-foreground">{CURRENT_RESUME.name}</h3>
-      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-        <div className="flex items-center gap-1">
-          <Calendar className="h-4 w-4" />
-          Uploaded {CURRENT_RESUME.uploadDate}
+          <div className="space-y-2">
+            <h3 className="font-medium text-card-foreground">
+              {data.metadata.name}
+            </h3>
+            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Calendar className="h-4 w-4" />
+                Uploaded {data.metadata.created_at.toLocaleDateString()}
+              </div>
+              <div className="flex items-center gap-1">
+                <User className="h-4 w-4" />
+                {data.metadata.page_count} {data.metadata.page_count === 1 ? "page" : "pages"}
+              </div>
+              <span>{data.metadata.size_in_bytes} bytes</span>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-1">
-          <User className="h-4 w-4" />
-          {CURRENT_RESUME.pages} pages
-        </div>
-        <span>{CURRENT_RESUME.size}</span>
-      </div>
-    </div>
-  );
-}
 
-function ResumeActions() {
-  return (
-    <div className="flex items-center gap-2">
-      <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 border bg-background shadow-sm hover:bg-accent hover:text-accent-foreground px-4 py-2">
-        <Eye className="h-4 w-4" />
-        View
-      </button>
-      <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 border bg-background shadow-sm hover:bg-accent hover:text-accent-foreground px-4 py-2">
-        <Download className="h-4 w-4" />
-        Download
-      </button>
+        <div className="flex items-center gap-2">
+          <button
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 border bg-background shadow-sm hover:bg-accent hover:text-accent-foreground px-4 py-2"
+            onClick={() => { }}
+          >
+            <Download className="h-4 w-4" />
+            Download
+          </button>
+          <button
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 border bg-background shadow-sm hover:bg-red-600 hover:text-red-100 px-4 py-2"
+            onClick={() => { }}
+          >
+            Delete
+            <Trash className="h-4 w-4" />
+          </button>
+        </div>
+
+      </div>
     </div>
   );
 }
